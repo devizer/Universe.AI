@@ -48,7 +48,7 @@ jobs:
 
     - name: 'Run "8845HS vs 12700H"'
       run: |
-        docker exec -it ollama ollama run mistral "8845HS vs 12700H"
+        docker exec -t ollama ollama run ${{ matrix.model }} "8845HS vs 12700H"
 
           
   Combine:
