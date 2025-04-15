@@ -67,6 +67,15 @@ jobs:
         docker cp $HOME/start-me.sh ollama:/start-me.sh
         docker exec ollama bash -e /start-me.sh
 
+    - name: 'Run "8845HS vs 12700H"'
+      run: |
+        set -eu -o pipefail;
+        Say "Free Memory"
+        free -m
+        Say "Free Space"
+        df -h -T
+        Say "System Stat"
+        Show-System-Stat
           
   Combine:
     name: Combine results in a single Artifact
