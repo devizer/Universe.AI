@@ -37,6 +37,7 @@ jobs:
 
     - name: Start ollama
       run: |
+        set -eu -o pipefail;
         script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
         cat /etc/docker/daemon.json || true
         echo '{ "data-root": "/mnt/docker" }' | sudo tee /etc/docker/daemon.json
@@ -54,6 +55,7 @@ jobs:
 
     - name: Pull ${{ matrix.model }}
       run: |
+        set -eu -o pipefail;
         docker exec -t ollama ollama pull ${{ matrix.model }}
 
     - name: 'Run "8845HS vs 12700H"'
