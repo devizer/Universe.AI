@@ -43,8 +43,9 @@ jobs:
         echo '{ "data-root": "/mnt/docker" }' | sudo tee /etc/docker/daemon.json
         try-and-retry sudo systemctl restart docker
 
+        Say "Creating swap"
         file=/swap
-        time sudo dd if=/dev/zero of=$file bs=$((1024*1024)) count=10000 status=progress
+        time sudo dd if=/dev/zero of=$file bs=$((1024*1024)) count=23000
         sudo chmod 600 $file
         sudo mkswap $file
         sudo swapon $file
