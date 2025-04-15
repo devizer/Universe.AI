@@ -39,6 +39,15 @@ jobs:
       run: |
         script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
         cat /etc/docker/daemon.json || true
+        echo '{ "data-root": "/mnt/docker" }' | sudo tee /etc/docker/daemon.json
+        try-and-retry sudo systemctl restart docker
+
+        file=/swap
+        time sudo dd if=/dev/zero of=$file bs=$((1024*1024)) count=10000 status=progress
+        sudo chmod 600 $file
+        sudo mkswap $file
+        sudo swapon $file
+
         df -h -T
         try-and-retry docker pull ollama/ollama
         docker run -d --name ollama -p 11434:11434 ollama/ollama
