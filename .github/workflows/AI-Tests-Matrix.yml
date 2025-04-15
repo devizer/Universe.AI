@@ -40,10 +40,11 @@ jobs:
         set -eu -o pipefail;
         script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
         cat /etc/docker/daemon.json || true
+        sudo rm -rf /var/lib/docker
         echo '{ "data-root": "/mnt/docker" }' | sudo tee /etc/docker/daemon.json
         try-and-retry sudo systemctl restart docker
 
-        Say "Creating swap"
+        Say "Creating swap 23Gb"
         file=/swap
         time sudo dd if=/dev/zero of=$file bs=$((1024*1024)) count=23000
         sudo chmod 600 $file
