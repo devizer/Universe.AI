@@ -1,0 +1,79 @@
+name: AI Tests Matrix
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  TestOllamaAI:
+    name: Ollama
+    strategy:
+      fail-fast: false
+      matrix:
+        model:
+          - 'deepseek-r1:1.5b'
+          - 'deepseek-r1:7b'
+          - 'deepseek-r1:8b'
+          - 'deepseek-r1:14b'
+          - 'deepseek-r1:32b'
+          - 'deepseek-r1:70b'
+          - 'deepseek-r1:671b'
+          - 'gemma3:1b'
+          - 'gemma3:4b'
+          - 'gemma3:12b'
+          - 'gemma3:27b'
+
+
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Start ollama
+      run: |
+        script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
+        df -h -T
+        try-and -retry docker pull ollama/ollama
+        docker run -d --name ollama -p 11434:11434 ollama/ollama
+
+    - name: Pull ${{ matrix.model }}
+      run: |
+        docker exec -t ollama ollama pull mistral ${{ matrix.model }}
+
+    - name: Pull ${{ matrix.model }}
+      run: |
+        docker exec -t ollama ollama pull ${{ matrix.model }}
+
+    - name: 'Run "8845HS vs 12700H"'
+      run: |
+        docker exec -it ollama ollama run mistral "8845HS vs 12700H"
+
+          
+  Combine:
+    name: Combine results in a single Artifact
+    needs: [TestOllamaAI]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download All Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: '**'
+        path: "${{ runner.temp }}/Combined"
+        merge-multiple: false
+
+    - name: Show Download Structure
+      run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq; tree $RUNNER_TEMP'
+
+    - name: Upload Combined System Info
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'Combined CPU Usage Tests'
+        path: "${{ runner.temp }}/Combined"
+
