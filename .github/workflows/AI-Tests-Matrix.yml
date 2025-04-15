@@ -44,10 +44,6 @@ jobs:
 
     - name: Pull ${{ matrix.model }}
       run: |
-        try-and-retry docker exec -t ollama ollama pull mistral ${{ matrix.model }}
-
-    - name: Pull ${{ matrix.model }}
-      run: |
         docker exec -t ollama ollama pull ${{ matrix.model }}
 
     - name: 'Run "8845HS vs 12700H"'
