@@ -39,12 +39,12 @@ jobs:
       run: |
         script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
         df -h -T
-        try-and -retry docker pull ollama/ollama
+        try-and-retry docker pull ollama/ollama
         docker run -d --name ollama -p 11434:11434 ollama/ollama
 
     - name: Pull ${{ matrix.model }}
       run: |
-        docker exec -t ollama ollama pull mistral ${{ matrix.model }}
+        try-and-retry docker exec -t ollama ollama pull mistral ${{ matrix.model }}
 
     - name: Pull ${{ matrix.model }}
       run: |
