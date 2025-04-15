@@ -65,9 +65,10 @@ jobs:
         ollama run ${{ matrix.model }} "8845HS vs 12700H" | cat
         EOF
         docker cp $HOME/start-me.sh ollama:/start-me.sh
-        docker exec ollama bash -e /start-me.sh
+        docker exec ollama bash -eu -o pipefail /start-me.sh
 
-    - name: 'Run "8845HS vs 12700H"'
+    - name: 'System Info'
+      if: always()
       run: |
         set -eu -o pipefail;
         Say "Free Memory"
