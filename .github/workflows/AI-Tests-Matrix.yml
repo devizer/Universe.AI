@@ -38,6 +38,7 @@ jobs:
     - name: Start ollama
       run: |
         script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
+        cat /etc/docker/daemon.json || true
         df -h -T
         try-and-retry docker pull ollama/ollama
         docker run -d --name ollama -p 11434:11434 ollama/ollama
