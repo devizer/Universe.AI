@@ -46,6 +46,7 @@ jobs:
     - name: Start ollama
       run: |
         set -eu -o pipefail;
+        mkdir -p "${{ runner.temp }}/Artifacts"
         script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
         cat /etc/docker/daemon.json || true
         sudo rm -rf /var/lib/docker
@@ -77,7 +78,7 @@ jobs:
     - name: API/TAGS ${{ matrix.model }}
       run: |
         set -eu -o pipefail;
-        curl http://localhost:11434/api/tags | jq .
+        curl http://localhost:11434/api/tags | jq . | tee "${{ runner.temp }}/Artifacts/api-tags.json"
 
     - name: API/SHOW ${{ matrix.model }}
       run: |
@@ -87,17 +88,17 @@ jobs:
           "model": "${{ matrix.model }}",
           "verbose": false
         }
-        ' | jq .
+        ' | jq . | tee "${{ runner.temp }}/Artifacts/api-show.json"
 
     - name: 'ASK "8845HS vs 12700H"'
       run: |
         set -eu -o pipefail;
-        bash ask.sh "${{ matrix.model }}" "8845HS vs 12700H"
+        bash ask.sh "${{ matrix.model }}" "8845HS vs 12700H" | tee "${{ runner.temp }}/Artifacts/ask-1-short.txt"
 
     - name: 'ASK "Compare AMD Ryzen 8845HS vs Intel i7-12700H. Also use specification from cpu-world.com"'
       run: |
         set -eu -o pipefail;
-        bash ask.sh "${{ matrix.model }}" "Compare AMD Ryzen 8845HS vs Intel i7-12700H. Also use specification from cpu-world.com"
+        bash ask.sh "${{ matrix.model }}" "Compare AMD Ryzen 8845HS vs Intel i7-12700H. Also use specification from cpu-world.com" | tee "${{ runner.temp }}/Artifacts/ask-2-detailed.txt"
     
     - name: 'System Info'
       if: always()
@@ -108,8 +109,15 @@ jobs:
         Say "Free Space"
         df -h -T
         Say "System Stat"
-        Show-System-Stat
+        Show-System-Stat | tee "${{ runner.temp }}/Artifacts/System-Info.log"
           
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: 'Model ${{ matrix.model }}'
+        path: '${{ runner.temp }}/Artifacts'
+
   Combine:
     name: Combine results in a single Artifact
     needs: [TestOllamaAI]
