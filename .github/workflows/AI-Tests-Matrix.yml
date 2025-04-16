@@ -20,13 +20,18 @@ jobs:
           - 'deepseek-r1:7b'
           - 'deepseek-r1:8b'
           - 'deepseek-r1:14b'
-          - 'deepseek-r1:32b'
-          - 'deepseek-r1:70b'
-          - 'deepseek-r1:671b'
+          # - 'deepseek-r1:32b'
+          # - 'deepseek-r1:70b'
+          # - 'deepseek-r1:671b'
           - 'gemma3:1b'
           - 'gemma3:4b'
-          - 'gemma3:12b'
-          - 'gemma3:27b'
+          - 'gemma3:12b'    # google
+          # - 'gemma3:27b'
+          - 'phy4:14b'      # microsoft
+          - 'mixtral:8x7b'  # A set of Mixture of Experts (MoE) model with open weights by Mistral AI in 8x7b and 8x22b parameter sizes.
+          - 'mixtral:8x22b'
+          - 'mistral-nemo:12b'  # A state-of-the-art 12B model with 128k context length, built by Mistral AI in collaboration with NVIDIA.
+          
 
 
     runs-on: ubuntu-24.04
@@ -50,12 +55,12 @@ jobs:
         sudo chmod 600 $file
         sudo mkswap $file
         sudo swapon $file
-        Say "Creating swap /mnt/swap 8Gb"
-        file=/mnt/swap
-        time sudo dd if=/dev/zero of=$file bs=$((1024*1024)) count=8000
-        sudo chmod 600 $file
-        sudo mkswap $file
-        sudo swapon $file
+        # Say "Creating swap /mnt/swap 8Gb"
+        # file=/mnt/swap
+        # time sudo dd if=/dev/zero of=$file bs=$((1024*1024)) count=8000
+        # sudo chmod 600 $file
+        # sudo mkswap $file
+        # sudo swapon $file
 
         df -h -T
         try-and-retry docker pull ollama/ollama
