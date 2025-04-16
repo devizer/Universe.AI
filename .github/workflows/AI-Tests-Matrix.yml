@@ -27,10 +27,12 @@ jobs:
           - 'gemma3:4b'
           - 'gemma3:12b'    # google
           # - 'gemma3:27b'
-          - 'phy4:14b'      # microsoft
+          - 'phy3:14b'      # microsoft
+          - 'phy3:3.8b'     
           - 'mixtral:8x7b'  # A set of Mixture of Experts (MoE) model with open weights by Mistral AI in 8x7b and 8x22b parameter sizes.
           - 'mixtral:8x22b'
           - 'mistral-nemo:12b'  # A state-of-the-art 12B model with 128k context length, built by Mistral AI in collaboration with NVIDIA.
+          - 'darkllama3.1'        # Llama 3.1 8B Q8.0 - Uncensored with a penchant for infamy.
           
 
 
@@ -71,15 +73,16 @@ jobs:
         set -eu -o pipefail;
         docker exec ollama bash -c "ollama pull ${{ matrix.model }} | cat"
 
-    - name: 'Run "8845HS vs 12700H"'
+    - name: 'ASK "8845HS vs 12700H"'
       run: |
         set -eu -o pipefail;
-        cat << 'EOF' > "$HOME/start-me.sh"
-        ollama run ${{ matrix.model }} "8845HS vs 12700H" | cat
-        EOF
-        docker cp $HOME/start-me.sh ollama:/start-me.sh
-        docker exec ollama bash -eu -o pipefail /start-me.sh
+        bash ask.sh "${{ matrix.model }}" "8845HS vs 12700H"
 
+    - name: 'ASK "Compare AMD Ryzen 8845HS vs Intel i7-12700H. Also use specification from cpu-world.com"'
+      run: |
+        set -eu -o pipefail;
+        bash ask.sh "${{ matrix.model }}" "Compare AMD Ryzen 8845HS vs Intel i7-12700H. Also use specification from cpu-world.com"
+    
     - name: 'System Info'
       if: always()
       run: |
