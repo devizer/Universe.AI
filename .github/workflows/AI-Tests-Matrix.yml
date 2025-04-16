@@ -33,8 +33,12 @@ jobs:
           # - 'mixtral:8x22b' # 79Gb
           - 'mistral-nemo:12b'    # A state-of-the-art 12B model with 128k context length, built by Mistral AI in collaboration with NVIDIA.
           - 'phuzzy/darkllama3.1' # Llama 3.1 8B Q8.0 - Uncensored with a penchant for infamy.
-          
-          
+
+          - 'llama3.2-vision:11b'
+          - 'llava:7b'   # https://ollama.com/blog/vision-models?__from__=talkingdev
+          - 'llava:13b'
+          - '0ssamaak0/xtuner-llava:llama3-8b-v1.1-f16' # 17Gb
+          - '0ssamaak0/xtuner-llava:phi3-mini-f16'
 
 
     runs-on: ubuntu-24.04
