@@ -105,7 +105,7 @@ jobs:
         family="$(jq -r ".details.family" "$show")"
         echo "$family" > "iFAMILY $family ${{ steps.starting.outputs.artifact }}.txt"
         parameter_size="$(jq -r ".parameter_size" "$show")"
-        echo "$family" > "iSIZE $parameter_size ${{ steps.starting.outputs.artifact }}.txt"
+        echo "$parameter_size" > "iSIZE $parameter_size ${{ steps.starting.outputs.artifact }}.txt"
 
 
 
