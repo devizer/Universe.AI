@@ -30,7 +30,7 @@ jobs:
 
 
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 360
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
     - name: Pull ${{ matrix.model }}
       run: |
         set -eu -o pipefail;
-        docker exec -t ollama ollama pull ${{ matrix.model }}
+        docker exec ollama ollama pull ${{ matrix.model }}
 
     - name: 'Run "8845HS vs 12700H"'
       run: |
