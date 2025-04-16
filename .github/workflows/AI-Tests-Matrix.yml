@@ -64,7 +64,7 @@ jobs:
     - name: Pull ${{ matrix.model }}
       run: |
         set -eu -o pipefail;
-        docker exec ollama ollama pull ${{ matrix.model }}
+        docker exec ollama bash -c "ollama pull ${{ matrix.model }} | cat"
 
     - name: 'Run "8845HS vs 12700H"'
       run: |
