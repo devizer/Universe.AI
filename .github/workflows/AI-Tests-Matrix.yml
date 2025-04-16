@@ -37,7 +37,7 @@ jobs:
           - 'llama3.2-vision:11b'
           - 'llava:7b'   # https://ollama.com/blog/vision-models?__from__=talkingdev
           - 'llava:13b'
-          - '0ssamaak0/xtuner-llava:llama3-8b-v1.1-f16' # 17Gb
+          - '0ssamaak0/xtuner-llava:llama3-8b-v1.1-f16' # 16Gb
           - '0ssamaak0/xtuner-llava:phi3-mini-f16'
 
 
@@ -92,22 +92,32 @@ jobs:
     - name: API/SHOW ${{ matrix.model }}
       run: |
         set -eu -o pipefail;
+        show="${{ runner.temp }}/Artifacts/api-show.json"
         curl http://localhost:11434/api/show -d '
         {
           "model": "${{ matrix.model }}",
           "verbose": false
         }
-        ' | jq . | tee "${{ runner.temp }}/Artifacts/api-show.json"
+        ' | jq . | tee "$show"
+        cd "${{ runner.temp }}/Artifacts"
+        format="$(jq -r ".details.format" "$show")"
+        echo "$format" > "iFORMAT $format ${{ steps.starting.outputs.artifact }}.txt"
+        family="$(jq -r ".details.family" "$show")"
+        echo "$family" > "iFAMILY $family ${{ steps.starting.outputs.artifact }}.txt"
+        parameter_size="$(jq -r ".parameter_size" "$show")"
+        echo "$family" > "iSIZE $parameter_size ${{ steps.starting.outputs.artifact }}.txt"
+
+
 
     - name: 'ASK "8845HS vs 12700H"'
       run: |
         set -eu -o pipefail;
-        bash ask.sh "${{ matrix.model }}" "8845HS vs 12700H" | tee "${{ runner.temp }}/Artifacts/ask-1-short.txt"
+        bash ask.sh "${{ matrix.model }}" "8845HS vs 12700H" | tee "${{ runner.temp }}/Artifacts/ask-1-short.md"
 
     - name: 'ASK "Compare AMD Ryzen 8845HS vs Intel i7-12700H. Also use specification from cpu-world.com"'
       run: |
         set -eu -o pipefail;
-        bash ask.sh "${{ matrix.model }}" "Compare AMD Ryzen 8845HS vs Intel i7-12700H. Also use specification from cpu-world.com" | tee "${{ runner.temp }}/Artifacts/ask-2-detailed.txt"
+        bash ask.sh "${{ matrix.model }}" "Compare AMD Ryzen 8845HS vs Intel i7-12700H. Also use specification from cpu-world.com" | tee "${{ runner.temp }}/Artifacts/ask-2-detailed.md"
     
     - name: 'System Info'
       if: always()
