@@ -73,7 +73,21 @@ jobs:
       run: |
         set -eu -o pipefail;
         docker exec ollama bash -c "ollama pull ${{ matrix.model }} | cat"
+
+    - name: API/TAGS ${{ matrix.model }}
+      run: |
+        set -eu -o pipefail;
         curl http://localhost:11434/api/tags | jq .
+
+    - name: API/SHOW ${{ matrix.model }}
+      run: |
+        set -eu -o pipefail;
+        curl http://localhost:11434/api/show -d '
+        {
+          "model": "${{ matrix.model }}",
+          "verbose": true
+        }
+        ' | jq .
 
     - name: 'ASK "8845HS vs 12700H"'
       run: |
