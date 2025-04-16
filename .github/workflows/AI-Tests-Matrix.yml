@@ -31,8 +31,9 @@ jobs:
           - 'phi3:3.8b'     
           - 'mixtral:8x7b'  # 26Gb, A set of Mixture of Experts (MoE) model with open weights by Mistral AI in 8x7b and 8x22b parameter sizes.
           # - 'mixtral:8x22b' # 79Gb
-          - 'mistral-nemo:12b'  # A state-of-the-art 12B model with 128k context length, built by Mistral AI in collaboration with NVIDIA.
-          - 'darkllama3.1'        # Llama 3.1 8B Q8.0 - Uncensored with a penchant for infamy.
+          - 'mistral-nemo:12b'    # A state-of-the-art 12B model with 128k context length, built by Mistral AI in collaboration with NVIDIA.
+          - 'phuzzy/darkllama3.1' # Llama 3.1 8B Q8.0 - Uncensored with a penchant for infamy.
+          
           
 
 
