@@ -27,8 +27,8 @@ jobs:
           - 'gemma3:4b'
           - 'gemma3:12b'    # google
           # - 'gemma3:27b'
-          - 'phy3:14b'      # microsoft
-          - 'phy3:3.8b'     
+          - 'phi3:14b'      # microsoft
+          - 'phi3:3.8b'     
           - 'mixtral:8x7b'  # 26Gb, A set of Mixture of Experts (MoE) model with open weights by Mistral AI in 8x7b and 8x22b parameter sizes.
           # - 'mixtral:8x22b' # 79Gb
           - 'mistral-nemo:12b'  # A state-of-the-art 12B model with 128k context length, built by Mistral AI in collaboration with NVIDIA.
