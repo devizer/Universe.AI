@@ -85,7 +85,7 @@ jobs:
         curl http://localhost:11434/api/show -d '
         {
           "model": "${{ matrix.model }}",
-          "verbose": true
+          "verbose": false
         }
         ' | jq .
 
