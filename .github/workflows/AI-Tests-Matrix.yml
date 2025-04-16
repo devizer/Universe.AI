@@ -47,6 +47,10 @@ jobs:
       run: |
         set -eu -o pipefail;
         mkdir -p "${{ runner.temp }}/Artifacts"
+        artifact="$(echo "${{ matrix.model }}" | tr ':' '_')"
+        echo "::set-output name=artifact::$artifact"
+        echo "ARTIFACT: $artifact"
+
         script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
         cat /etc/docker/daemon.json || true
         sudo rm -rf /var/lib/docker
@@ -115,7 +119,7 @@ jobs:
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: 'Model ${{ matrix.model }}'
+        name: 'Model ${{ env.artifact }}'
         path: '${{ runner.temp }}/Artifacts'
 
   Combine:
