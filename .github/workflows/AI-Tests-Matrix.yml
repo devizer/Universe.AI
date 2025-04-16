@@ -44,6 +44,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Start ollama
+      id: starting
       run: |
         set -eu -o pipefail;
         mkdir -p "${{ runner.temp }}/Artifacts"
@@ -119,7 +120,7 @@ jobs:
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: 'Model ${{ env.artifact }}'
+        name: 'Model ${{ steps.starting.outputs.artifact }}'
         path: '${{ runner.temp }}/Artifacts'
 
   Combine:
