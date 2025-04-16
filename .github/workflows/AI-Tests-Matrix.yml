@@ -104,7 +104,7 @@ jobs:
         echo "$format" > "iFORMAT $format ${{ steps.starting.outputs.artifact }}.txt"
         family="$(jq -r ".details.family" "$show")"
         echo "$family" > "iFAMILY $family ${{ steps.starting.outputs.artifact }}.txt"
-        parameter_size="$(jq -r ".parameter_size" "$show")"
+        parameter_size="$(jq -r ".details.parameter_size" "$show")"
         echo "$parameter_size" > "iSIZE $parameter_size ${{ steps.starting.outputs.artifact }}.txt"
 
 
