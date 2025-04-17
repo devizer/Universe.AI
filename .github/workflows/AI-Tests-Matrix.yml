@@ -115,20 +115,21 @@ jobs:
         bash ask.sh "${{ matrix.model }}" "8845HS vs 12700H" | tee "${{ runner.temp }}/Artifacts/ask-1-short.md"
 
     - name: 'ASK "Compare AMD Ryzen 8845HS vs Intel i7-12700H. Also use specification from cpu-world.com"'
+      if: always()
       run: |
-        set -eu -o pipefail;
-        bash ask.sh "${{ matrix.model }}" "Compare AMD Ryzen 8845HS vs Intel i7-12700H. Also use specification from cpu-world.com" | tee "${{ runner.temp }}/Artifacts/ask-2-detailed.md"
+          set -eu -o pipefail;
+          bash ask.sh "${{ matrix.model }}" "Compare AMD Ryzen 8845HS vs Intel i7-12700H. Also use specification from cpu-world.com" | tee "${{ runner.temp }}/Artifacts/ask-2-detailed.md"
     
     - name: 'System Info'
       if: always()
       run: |
-        set -eu -o pipefail;
-        Say "Free Memory"
-        free -m
-        Say "Free Space"
-        df -h -T
-        Say "System Stat"
-        Show-System-Stat | tee "${{ runner.temp }}/Artifacts/System-Info.log"
+          set -eu -o pipefail;
+          Say "Free Memory"
+          free -m
+          Say "Free Space"
+          df -h -T
+          Say "System Stat"
+          Show-System-Stat | tee "${{ runner.temp }}/Artifacts/System-Info.log"
           
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
